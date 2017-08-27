@@ -1,21 +1,15 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package br.univali.portugol.nucleo.bibliotecas.experimentos;
 
-import java.util.ArrayList;
+import java.awt.Graphics;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
+import javax.swing.JPanel;
 
 /**
  *
  * @author Douglas
  */
-public class BaseAgente implements IAgente
+public class BaseAgente extends JPanel implements IAgente 
 {
     //Lista com os parâmetros do agente
     private Map<String, Object> listaParametros = null;
@@ -66,7 +60,8 @@ public class BaseAgente implements IAgente
     @Override
     public void definir_valor_atributo(String nome_atributo, String valor)
     {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if(verificarAtributoExiste(nome_atributo))
+            listaParametros.replace(nome_atributo, valor);
     }
 
     @Override
@@ -110,7 +105,7 @@ public class BaseAgente implements IAgente
     {
         try
         {
-            if (verificarParametroExiste(nome_atributo))
+            if (verificarAtributoExiste(nome_atributo))
             {
                 return ((String) listaParametros.get(nome_atributo));
             }
@@ -131,7 +126,7 @@ public class BaseAgente implements IAgente
     {
         try
         {
-            if (verificarParametroExiste(nome_atributo))
+            if (verificarAtributoExiste(nome_atributo))
             {
                 return ((char) listaParametros.get(nome_atributo));
             }
@@ -152,7 +147,7 @@ public class BaseAgente implements IAgente
     {
         try
         {
-            if (verificarParametroExiste(nome_atributo))
+            if (verificarAtributoExiste(nome_atributo))
             {
                 return ((int) listaParametros.get(nome_atributo));
             }
@@ -173,7 +168,7 @@ public class BaseAgente implements IAgente
     {
         try
         {
-            if (verificarParametroExiste(nome_atributo))
+            if (verificarAtributoExiste(nome_atributo))
             {
                 return ((boolean) listaParametros.get(nome_atributo));
             }
@@ -194,7 +189,7 @@ public class BaseAgente implements IAgente
     {
         try
         {
-            if (verificarParametroExiste(nome_atributo))
+            if (verificarAtributoExiste(nome_atributo))
             {
                 return ((double) listaParametros.get(nome_atributo));
             }
@@ -246,7 +241,16 @@ public class BaseAgente implements IAgente
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    private boolean verificarParametroExiste(String nome)
+    @Override
+    protected void paintComponent(Graphics g)
+    {
+        //Cria aqui os desenhos (as formas)
+        super.paintComponent(g); //To change body of generated methods, choose Tools | Templates.
+    }
+    
+    
+
+    private boolean verificarAtributoExiste(String nome)
     {
         return listaParametros.containsKey(nome);
     }

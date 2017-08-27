@@ -19,6 +19,15 @@ public class Ambiente
     private Retalho retalho = null;
     private static int id = 0;
 
+    //Controla qual é agente atual da simulação
+    private Agente agenteAtual = null;
+    
+    public Agente getAgenteAtual()
+    {
+        return agenteAtual;
+    }
+    
+
     public Ambiente()
     {
         inicializarAmbiente();
@@ -66,12 +75,14 @@ public class Ambiente
     public void criar_agentes(int numero_agentes, boolean aleatorio)
     {
         RetalhoCoordenadas coordenadas = retalho.definirCoordenadasIniciais();
-        
+
         for (int i = 0; i < numero_agentes; i++)
         {
-            if(aleatorio)
+            if (aleatorio)
+            {
                 coordenadas = retalho.definirCoordenadasIniciais();
-            
+            }
+
             listaAgentes.add(new Agente(coordenadas.getCoordenadaX(), coordenadas.getCoordenadaY(), ++id));
         }
     }
@@ -93,7 +104,19 @@ public class Ambiente
 
     public double media(String nome_parametro)
     {
-        return 0;
+        double media = 0;
+        
+        if (listaAgentes.size() > 0)
+        {
+            for (Agente agente : listaAgentes)
+            {
+                media += agente.retornar_atributo_real(nome_parametro);
+            }
+            
+            media = media / listaAgentes.size();
+        }
+        
+        return media;
     }
 
     public int agentes_com_cor(int cor)
@@ -107,11 +130,18 @@ public class Ambiente
     }
 
     //Adiciona um parâmetro a todos os agentes
-    public void adicionarParametroAgentes(String nome)
+    public void adicionarAtributoAgentes(String nome)
     {
         for (Agente agente : listaAgentes)
         {
             agente.criar_parametro(nome);
         }
+    }
+    
+    //Aplica o processo de exclusão do agente do ambiente de simulação
+    public void matarAgente(){
+        agenteAtual.morrer();
+        listaAgentes.remove(agenteAtual);
+        agenteAtual = null;
     }
 }
