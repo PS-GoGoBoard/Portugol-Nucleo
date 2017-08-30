@@ -9,6 +9,7 @@ import br.univali.portugol.nucleo.bibliotecas.base.anotacoes.DocumentacaoFuncao;
 import br.univali.portugol.nucleo.bibliotecas.base.anotacoes.DocumentacaoParametro;
 import br.univali.portugol.nucleo.bibliotecas.base.anotacoes.PropriedadesBiblioteca;
 import br.univali.portugol.nucleo.bibliotecas.gogoboard.GoGoDriver;
+import org.hid4java.HidException;
 
 /**
  *
@@ -21,7 +22,12 @@ import br.univali.portugol.nucleo.bibliotecas.gogoboard.GoGoDriver;
 )
 public final class GoGoBoard extends Biblioteca 
 {   
-    private static GoGoDriver goGoDriver = new GoGoDriver();
+    private static GoGoDriver goGoDriver;
+
+    public GoGoBoard() throws HidException, ErroExecucaoBiblioteca
+    {
+        GoGoBoard.goGoDriver = new GoGoDriver();
+    }
     
     @DocumentacaoFuncao(
             descricao = "Realiza a consulta do valor de um sensor",
@@ -82,5 +88,21 @@ public final class GoGoBoard extends Biblioteca
     public void acender_led(boolean ligar) throws ErroExecucaoBiblioteca, InterruptedException
     {
         goGoDriver.led(ligar);
+    }
+    
+    @DocumentacaoFuncao(
+            descricao = "Exibir texto no painel de segimentos",
+            parametros =
+            {
+                @DocumentacaoParametro(nome = "texto", descricao = "Valor textual de 4 digitos que vai ser exibido no display de seguimentos.\n Deve ser de até 4 digitos.zn Ex: GoGo")
+            },
+            autores =
+            {
+                @Autor(nome = "Ailton Cardoso Jr", email = "ailtoncardosojr@edu.univali.br")
+            }
+    )
+    public void exibeTextoCurto(String texto) throws ErroExecucaoBiblioteca, InterruptedException
+    {
+        goGoDriver.exibeTextoCurto(texto);
     }
 }

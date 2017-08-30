@@ -1,6 +1,5 @@
 package br.univali.portugol.nucleo.bibliotecas.gogoboard;
 
-import br.univali.portugol.nucleo.analise.semantica.erros.ErroBibliotecaNaoInserida;
 import br.univali.portugol.nucleo.bibliotecas.base.ErroExecucaoBiblioteca;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
@@ -23,32 +22,24 @@ public class GoGoDriver implements HidServicesListener
     private HidServices servicosHID;
     private HidDevice gogoBoard;
 
-    public GoGoDriver()
+    public GoGoDriver() throws HidException, ErroExecucaoBiblioteca
     {
-        
-        try
-        {
-            carregarServicosHID();
-        }
-        catch (HidException ex)
-        {
-            Logger.getLogger(GoGoDriver.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        catch (ErroExecucaoBiblioteca ex)
-        {
-            Logger.getLogger(GoGoDriver.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        carregarServicosHID();
     }
 
-    private void enviarMensagem(byte[] mensagem)
+    private void enviarMensagem(byte[] mensagem) throws ErroExecucaoBiblioteca
     {
         if (gogoBoard != null)
         {
             gogoBoard.write(mensagem, mensagem.length, (byte) 0);
         }
+        else
+        {
+            throw new ErroExecucaoBiblioteca("Erro, GoGo Board não conectada");
+        }
     }
 
-    private byte[] receberMensagem(int numBytes) 
+    private byte[] receberMensagem(int numBytes) throws ErroExecucaoBiblioteca
     {
         byte[] mensagem = new byte[numBytes];
         if (gogoBoard != null)
@@ -56,17 +47,20 @@ public class GoGoDriver implements HidServicesListener
             gogoBoard.read(mensagem, 500);
             return mensagem;
         }
-        return null;
+        else
+        {
+            throw new ErroExecucaoBiblioteca("Erro, GoGo Board não conectada");
+        }
     }
 
-    public void beep()
+    public void beep() throws ErroExecucaoBiblioteca
     {
         byte[] mensagem = new byte[64];
         mensagem[2] = 11;
         enviarMensagem(mensagem);
     }
 
-    public void led(boolean ligar) 
+    public void led(boolean ligar) throws ErroExecucaoBiblioteca
     {
         byte[] mensagem = new byte[64];
         mensagem[2] = 10;
@@ -83,18 +77,23 @@ public class GoGoDriver implements HidServicesListener
 
     public void exibeTextoCurto(String texto) throws ErroExecucaoBiblioteca
     {
-        if (texto.length() > 4)
+        if (gogoBoard != null)
         {
-            JOptionPane.showMessageDialog(null, "O display de segmentos não pode exibir mais de 4 characteres.", "Erro!", JOptionPane.ERROR_MESSAGE);
-            throw new HidException("Erro, o display de segmentos não pode exibir mais de 4 characteres.");
+            if (texto.length() > 4)
+            {
+                throw new ErroExecucaoBiblioteca("Erro, o display de segmentos não pode exibir mais de 4 characteres.");
+            }
+            byte[] mensagem = new byte[64];
+            mensagem[2] = 60;
+            for (int i = 0; i < texto.length(); i++)
+            {
+                mensagem[3 + i] = (byte) texto.charAt(i);
+            }
+            enviarMensagem(mensagem);
+        }else{
+            throw new ErroExecucaoBiblioteca("Erro, GoGo Board não conectada.");
         }
-        byte[] mensagem = new byte[64];
-        mensagem[2] = 60;
-        for (int i = 0; i < texto.length(); i++)
-        {
-            mensagem[3 + i] = (byte) texto.charAt(i);
-        }
-        enviarMensagem(mensagem);
+            
     }
 
     public void carregarServicosHID() throws HidException, ErroExecucaoBiblioteca
