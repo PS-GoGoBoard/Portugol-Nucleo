@@ -5,6 +5,7 @@
  */
 package br.univali.portugol.nucleo.bibliotecas.experimentos;
 
+import br.univali.portugol.nucleo.bibliotecas.base.ErroExecucaoBiblioteca;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.SwingUtilities;
@@ -24,7 +25,9 @@ public class Ambiente
     
     public Agente getAgenteAtual()
     {
-        return agenteAtual;
+
+        return listaAgentes.get(0);//Remover
+//        return agenteAtual;
     }
     
 
@@ -51,15 +54,7 @@ public class Ambiente
 
     public void executar(boolean sempre)
     {
-        SwingUtilities.invokeLater(new Runnable()
-        {
-            @Override
-            public void run()
-            {
-                Simulacao oJanela = new Simulacao();
-                oJanela.setVisible(true);
-            }
-        });
+        
     }
 
     public void limpar_tudo()
@@ -83,7 +78,11 @@ public class Ambiente
                 coordenadas = retalho.definirCoordenadasIniciais();
             }
 
-            listaAgentes.add(new Agente(coordenadas.getCoordenadaX(), coordenadas.getCoordenadaY(), ++id));
+            double coordenadaX = coordenadas.getCoordenadaX();
+            double coordenadaY = coordenadas.getCoordenadaY();
+            
+            IAgente agente = new Agente(coordenadaX, coordenadaY, ++id);
+            listaAgentes.add((Agente) agente);
         }
     }
 
@@ -102,7 +101,7 @@ public class Ambiente
 
     }
 
-    public double media(String nome_parametro)
+    public double media(String nome_parametro) throws ErroExecucaoBiblioteca
     {
         double media = 0;
         

@@ -1,34 +1,37 @@
 package br.univali.portugol.nucleo.bibliotecas.experimentos;
 
-import java.awt.Graphics;
-import java.util.HashMap;
+import br.univali.portugol.nucleo.bibliotecas.base.ErroExecucaoBiblioteca;
 import java.util.Map;
-import javax.swing.JPanel;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.logging.Logger;
 
 /**
  *
  * @author Douglas
  */
-public class BaseAgente extends JPanel implements IAgente 
+public class BaseAgente implements IAgente
 {
     //Lista com os parâmetros do agente
-    private Map<String, Object> listaParametros = null;
+    private final Map<String, Object> listaParametros = new ConcurrentHashMap<>();
     private double coordenadaX = 0;
     private double coordenadaY = 0;
     private int id = 0;
+    private static final Logger LOGGER = Logger.getLogger(BaseAgente.class.getName());
 
     //Construtor padrão
     public BaseAgente(double coordenadaX, double coordenadaY, int id)
     {
+        inicializar();
         this.coordenadaX = coordenadaX;
         this.coordenadaY = coordenadaY;
         this.id = id;
-        inicializar();
+
+        definirLog("Agente " + id + " inicializado com sucesso.");
     }
 
     private void inicializar()
     {
-        listaParametros = new HashMap<>();
+//        listaParametros = new HashMap<>();
     }
 
     private void adicionarParametroLista(String nome)
@@ -36,6 +39,7 @@ public class BaseAgente extends JPanel implements IAgente
         if (!listaParametros.containsKey(nome))
         {
             listaParametros.put(nome, "");
+            definirLog("Parâmetro " + nome + " adicionado ao agente " + id);
         }
     }
 
@@ -48,7 +52,7 @@ public class BaseAgente extends JPanel implements IAgente
     @Override
     public void definir_cor_agente(int cor)
     {
-        
+
     }
 
     @Override
@@ -60,8 +64,12 @@ public class BaseAgente extends JPanel implements IAgente
     @Override
     public void definir_valor_atributo(String nome_atributo, String valor)
     {
-        if(verificarAtributoExiste(nome_atributo))
+        if (verificarAtributoExiste(nome_atributo))
+        {
+            definirLog("Parâmetro " + nome_atributo + " valor atual: " + listaParametros.get(nome_atributo));
             listaParametros.replace(nome_atributo, valor);
+            definirLog("Parâmetro " + nome_atributo + " valor atualizado: " + listaParametros.get(nome_atributo));
+        }
     }
 
     @Override
@@ -101,108 +109,70 @@ public class BaseAgente extends JPanel implements IAgente
     }
 
     @Override
-    public String retornar_atributo_cadeia(String nome_atributo)
+    public String retornar_atributo_cadeia(String nome_atributo) throws ErroExecucaoBiblioteca
     {
-        try
+        if (verificarAtributoExiste(nome_atributo))
         {
-            if (verificarAtributoExiste(nome_atributo))
-            {
-                return ((String) listaParametros.get(nome_atributo));
-            }
-            else
-            {
-                return "";
-            }
+            return ((String) listaParametros.get(nome_atributo));
         }
-        catch (Exception ex)
+        else
         {
+            throw new ErroExecucaoBiblioteca("O parâmetro " + nome_atributo + " não existe.");
         }
-
-        return "";
     }
 
     @Override
-    public char retornar_atributo_caracter(String nome_atributo)
+    public char retornar_atributo_caracter(String nome_atributo) throws ErroExecucaoBiblioteca
     {
-        try
-        {
-            if (verificarAtributoExiste(nome_atributo))
-            {
-                return ((char) listaParametros.get(nome_atributo));
-            }
-            else
-            {
-                return ' ';
-            }
-        }
-        catch (Exception ex)
-        {
-        }
 
-        return ' ';
+        if (verificarAtributoExiste(nome_atributo))
+        {
+            return ((char) listaParametros.get(nome_atributo));
+        }
+        else
+        {
+            throw new ErroExecucaoBiblioteca("O parâmetro " + nome_atributo + " não existe.");
+        }
     }
 
     @Override
     public int retornar_atributo_inteiro(String nome_atributo)
     {
-        try
+        if (verificarAtributoExiste(nome_atributo))
         {
-            if (verificarAtributoExiste(nome_atributo))
-            {
-                return ((int) listaParametros.get(nome_atributo));
-            }
-            else
-            {
-                return 0;
-            }
+            return (Integer.parseInt(listaParametros.get(nome_atributo).toString()));
         }
-        catch (Exception ex)
+        else
         {
+            return 0;
         }
-
-        return 0;
     }
 
     @Override
-    public boolean retornar_atributo_logico(String nome_atributo)
+    public boolean retornar_atributo_logico(String nome_atributo) throws ErroExecucaoBiblioteca
     {
-        try
+        if (verificarAtributoExiste(nome_atributo))
         {
-            if (verificarAtributoExiste(nome_atributo))
-            {
-                return ((boolean) listaParametros.get(nome_atributo));
-            }
-            else
-            {
-                return false;
-            }
+            return (Boolean.parseBoolean(listaParametros.get(nome_atributo).toString()));
         }
-        catch (Exception ex)
+        else
         {
+            throw new ErroExecucaoBiblioteca("O parâmetro " + nome_atributo + " não existe");
         }
 
-        return false;
     }
 
     @Override
-    public double retornar_atributo_real(String nome_atributo)
+    public double retornar_atributo_real(String nome_atributo) throws ErroExecucaoBiblioteca
     {
-        try
+        if (verificarAtributoExiste(nome_atributo))
         {
-            if (verificarAtributoExiste(nome_atributo))
-            {
-                return ((double) listaParametros.get(nome_atributo));
-            }
-            else
-            {
-                return 0;
-            }
+            return (Double.parseDouble(listaParametros.get(nome_atributo).toString()));
         }
-        catch (Exception ex)
+        else
         {
+            throw new ErroExecucaoBiblioteca("O parâmetro " + nome_atributo + " não existe");
         }
-
-        return 0;
     }
 
     @Override
@@ -241,17 +211,21 @@ public class BaseAgente extends JPanel implements IAgente
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    @Override
-    protected void paintComponent(Graphics g)
-    {
-        //Cria aqui os desenhos (as formas)
-        super.paintComponent(g); //To change body of generated methods, choose Tools | Templates.
-    }
-    
-    
-
+//    @Override
+//    protected void paintComponent(Graphics g)
+//    {
+//        //Cria aqui os desenhos (as formas)
+//        super.paintComponent(g); //To change body of generated methods, choose Tools | Templates.
+//    }
     private boolean verificarAtributoExiste(String nome)
     {
         return listaParametros.containsKey(nome);
     }
+
+    public void definirLog(String mensagem)
+    {
+//        LOGGER.log(Level.INFO, mensagem);
+        System.out.println(mensagem);
+    }
+
 }
