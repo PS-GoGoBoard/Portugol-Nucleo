@@ -22,9 +22,20 @@ public class GoGoDriver implements HidServicesListener
     private HidServices servicosHID;
     private HidDevice gogoBoard;
 
-    public GoGoDriver() throws HidException, ErroExecucaoBiblioteca
+    public GoGoDriver()
     {
-        carregarServicosHID();
+        try
+        {
+            carregarServicosHID();
+        }
+        catch (HidException ex)
+        {
+            Logger.getLogger(GoGoDriver.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        catch (ErroExecucaoBiblioteca ex)
+        {
+            Logger.getLogger(GoGoDriver.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     private void enviarMensagem(byte[] mensagem) throws ErroExecucaoBiblioteca

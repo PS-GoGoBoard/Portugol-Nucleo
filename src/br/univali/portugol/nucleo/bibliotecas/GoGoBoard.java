@@ -22,12 +22,7 @@ import org.hid4java.HidException;
 )
 public final class GoGoBoard extends Biblioteca 
 {   
-    private static GoGoDriver goGoDriver;
-
-    public GoGoBoard() throws HidException, ErroExecucaoBiblioteca
-    {
-        GoGoBoard.goGoDriver = new GoGoDriver();
-    }
+    private static GoGoDriver goGoDriver = new GoGoDriver();
     
     @DocumentacaoFuncao(
             descricao = "Realiza a consulta do valor de um sensor",
