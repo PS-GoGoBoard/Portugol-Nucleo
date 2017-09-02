@@ -9,7 +9,6 @@ import br.univali.portugol.nucleo.bibliotecas.base.anotacoes.DocumentacaoFuncao;
 import br.univali.portugol.nucleo.bibliotecas.base.anotacoes.DocumentacaoParametro;
 import br.univali.portugol.nucleo.bibliotecas.base.anotacoes.PropriedadesBiblioteca;
 import br.univali.portugol.nucleo.bibliotecas.gogoboard.GoGoDriver;
-import org.hid4java.HidException;
 
 /**
  *
@@ -20,10 +19,11 @@ import org.hid4java.HidException;
         descricao = "Esta biblioteca permite manipular a controladora GoGo board",
         versao = "0.01"
 )
-public final class GoGoBoard extends Biblioteca 
-{   
+public final class GoGoBoard extends Biblioteca
+{
     private static GoGoDriver goGoDriver = new GoGoDriver();
-    
+    private Boolean[] estadoMotores = new Boolean[4];
+
     @DocumentacaoFuncao(
             descricao = "Realiza a consulta do valor de um sensor",
             parametros =
@@ -42,7 +42,7 @@ public final class GoGoBoard extends Biblioteca
     }
 
     @DocumentacaoFuncao(
-            descricao = "Liga os motores especificados or parametro",
+            descricao = "Ligar os motores especificados or parametro",
             parametros =
             {
                 @DocumentacaoParametro(nome = "motores", descricao = "as letras correspondentes aos motores desejados \n Ex: \"abcd\"")
@@ -54,9 +54,118 @@ public final class GoGoBoard extends Biblioteca
     )
     public void ligar_motor(String motores) throws ErroExecucaoBiblioteca, InterruptedException
     {
-        System.out.println("Ligar motor");
+        motores = motores.toLowerCase();
+        for (char motor : motores.toCharArray())
+        {
+            switch (motor)
+            {
+                case 'a':
+                    goGoDriver.selecionarMotor(1);
+                    estadoMotores[0] = true;
+                    break;
+                case 'b':
+                    goGoDriver.selecionarMotor(2);
+                    estadoMotores[1] = true;
+                    break;
+                case 'c':
+                    goGoDriver.selecionarMotor(4);
+                    estadoMotores[2] = true;
+                    break;
+                case 'd':
+                    goGoDriver.selecionarMotor(8);
+                    estadoMotores[3] = true;
+                    break;
+                default:
+                    throw new AssertionError();
+            }
+            goGoDriver.ligarMotor();
+            System.out.println("Ligar motor: " + motor);
+        }
+        System.out.println("------------------\n");
     }
-    
+
+    @DocumentacaoFuncao(
+            descricao = "Desligar os motores especificados or parametro",
+            parametros =
+            {
+                @DocumentacaoParametro(nome = "motores", descricao = "as letras correspondentes aos motores desejados \n Ex: \"abcd\"")
+            },
+            autores =
+            {
+                @Autor(nome = "Ailton Cardoso Jr", email = "ailtoncardosojr@edu.univali.br")
+            }
+    )
+    public void desligar_motor(String motores) throws ErroExecucaoBiblioteca, InterruptedException
+    {
+        motores = motores.toLowerCase();
+        for (char motor : motores.toCharArray())
+        {
+            switch (motor)
+            {
+                case 'a':
+                    goGoDriver.selecionarMotor(1);
+                    estadoMotores[0] = false;
+                    break;
+                case 'b':
+                    goGoDriver.selecionarMotor(2);
+                    estadoMotores[1] = false;
+                    break;
+                case 'c':
+                    goGoDriver.selecionarMotor(4);
+                    estadoMotores[2] = false;
+                    break;
+                case 'd':
+                    goGoDriver.selecionarMotor(8);
+                    estadoMotores[3] = false;
+                    break;
+                default:
+                    throw new AssertionError();
+            }
+            goGoDriver.desligarMotor();
+            System.out.println("Desligar motor: " + motor);
+        }
+        System.out.println("------------------\n");
+    }
+
+    @DocumentacaoFuncao(
+            descricao = "Retorna o estado dos motores especificados or parametro",
+            parametros =
+            {
+                @DocumentacaoParametro(nome = "motores", descricao = "as letras correspondentes aos motores desejados \n Ex: \"abcd\"")
+            },
+            retorno = "Estado do(s) sensor(es)",
+            autores =
+            {
+                @Autor(nome = "Ailton Cardoso Jr", email = "ailtoncardosojr@edu.univali.br")
+            }
+    )
+    public boolean estado_motor(String motores) throws ErroExecucaoBiblioteca, InterruptedException
+    {
+        boolean estado = false;
+        motores = motores.toLowerCase();
+        for (char motor : motores.toCharArray())
+        {
+            switch (motor)
+            {
+                case 'a':
+                    estado = estadoMotores[0];
+                    break;
+                case 'b':
+                    estado = estadoMotores[1];
+                    break;
+                case 'c':
+                    estado = estadoMotores[2];
+                    break;
+                case 'd':
+                    estado = estadoMotores[3];
+                    break;
+                default:
+                    throw new AssertionError();
+            }
+        }
+        return estado;
+    }
+
     @DocumentacaoFuncao(
             descricao = "Acionar o beep",
             autores =
@@ -84,7 +193,7 @@ public final class GoGoBoard extends Biblioteca
     {
         goGoDriver.led(ligar);
     }
-    
+
     @DocumentacaoFuncao(
             descricao = "Exibir texto no painel de segimentos",
             parametros =

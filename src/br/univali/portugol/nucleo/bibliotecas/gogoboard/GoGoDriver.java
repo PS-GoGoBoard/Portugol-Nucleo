@@ -5,7 +5,6 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JOptionPane;
 import org.hid4java.HidDevice;
 import org.hid4java.HidException;
 import org.hid4java.HidManager;
@@ -46,7 +45,7 @@ public class GoGoDriver implements HidServicesListener
         }
         else
         {
-            throw new ErroExecucaoBiblioteca("Erro, GoGo Board não conectada");
+            throw new ErroExecucaoBiblioteca("Erro, GoGo Board está sendo usada por outro programa ou não está conectada.");
         }
     }
 
@@ -60,8 +59,34 @@ public class GoGoDriver implements HidServicesListener
         }
         else
         {
-            throw new ErroExecucaoBiblioteca("Erro, GoGo Board não conectada");
+            throw new ErroExecucaoBiblioteca("Erro, GoGo Board está sendo usada por outro programa ou não está conectada.");
         }
+    }
+
+    public void selecionarMotor(int numMotor) throws ErroExecucaoBiblioteca
+    {
+        byte[] mensagem = new byte[64];
+        mensagem[2] = 7;
+        mensagem[3] = (byte) numMotor;
+        enviarMensagem(mensagem);
+    }
+
+    public void ligarMotor() throws ErroExecucaoBiblioteca
+    {
+        byte[] mensagem = new byte[64];
+        mensagem[2] = 2;
+        mensagem[3] = 0;
+        mensagem[4] = 1;
+        enviarMensagem(mensagem);
+    }
+
+    public void desligarMotor() throws ErroExecucaoBiblioteca
+    {
+        byte[] mensagem = new byte[64];
+        mensagem[2] = 2;
+        mensagem[3] = 0;
+        mensagem[4] = 0;
+        enviarMensagem(mensagem);
     }
 
     public void beep() throws ErroExecucaoBiblioteca
@@ -101,10 +126,12 @@ public class GoGoDriver implements HidServicesListener
                 mensagem[3 + i] = (byte) texto.charAt(i);
             }
             enviarMensagem(mensagem);
-        }else{
-            throw new ErroExecucaoBiblioteca("Erro, GoGo Board não conectada.");
         }
-            
+        else
+        {
+            throw new ErroExecucaoBiblioteca("Erro, GoGo Board está sendo usada por outro programa ou não está conectada.");
+        }
+
     }
 
     public void carregarServicosHID() throws HidException, ErroExecucaoBiblioteca
@@ -128,7 +155,7 @@ public class GoGoDriver implements HidServicesListener
     public short[] lerSensores() throws ErroExecucaoBiblioteca
     {
         short[] sensores = new short[8];
-
+        System.err.println("Lendo Sensor\n");
         byte[] data;
         do
         {
