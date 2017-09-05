@@ -10,7 +10,7 @@ import java.nio.ByteOrder;
  */
 public class Sensor
 {
-    private static GoGoDriver gogoDriver = new GoGoDriver();
+    //private static GoGoDriver gogoDriver = new GoGoDriver();
     private int nome;
     private int valor;
 
@@ -35,7 +35,7 @@ public class Sensor
         byte[] mensagem;
         do
         {
-            mensagem = gogoDriver.receberMensagem(64);
+            mensagem = GoGoDriver.obterInstancia().receberMensagem(64);
         }
         while (mensagem[0] != 0);       // Evitar pegar valor zerado do sensor
         ByteBuffer bb = ByteBuffer.wrap(mensagem, (2 * (nome-1)) + 1, 2); // Nome-1 pois o sensor começa em 0 na mensagem

@@ -18,6 +18,16 @@ public class GoGoDriver implements HidServicesListener
 {
     private HidServices servicosHID;
     private HidDevice gogoBoard;
+    private static GoGoDriver gogoDriver;
+
+    public static GoGoDriver obterInstancia()
+    {
+        if (gogoDriver == null)
+        {
+            gogoDriver = new GoGoDriver();
+        }
+        return gogoDriver;
+    }
 
     public GoGoDriver()
     {
@@ -37,7 +47,7 @@ public class GoGoDriver implements HidServicesListener
         }
     }
 
-    private void enviarMensagem(byte[] mensagem) throws ErroExecucaoBiblioteca
+    public void enviarMensagem(byte[] mensagem) throws ErroExecucaoBiblioteca
     {
         if (gogoBoard != null)
         {
@@ -140,22 +150,14 @@ public class GoGoDriver implements HidServicesListener
         // Pegar os servicos HID e add listener
         servicosHID = HidManager.getHidServices();
         servicosHID.addHidServicesListener(this);
-        
+
         System.out.println("Iniciando Driver GoGo");
         servicosHID.start();
 
         // Percorre a lista dos dispositivos conectados
-        for (HidDevice dispositivo : servicosHID.getAttachedHidDevices())
-        {
-            if (dispositivo.getVendorId() == 0x461
-                    && dispositivo.getProductId() == 0x20)
-            {
-                System.out.println("GoGo Board1: " + dispositivo);
                 gogoBoard = servicosHID.getHidDevice(0x461, 0x20, null);
+                System.out.println("GoGo Board1: " + gogoBoard);
                 System.out.println("");
-            }
-        }
-        
     }
 
     @Override

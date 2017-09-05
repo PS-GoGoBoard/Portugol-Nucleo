@@ -9,6 +9,7 @@ import br.univali.portugol.nucleo.bibliotecas.base.anotacoes.DocumentacaoFuncao;
 import br.univali.portugol.nucleo.bibliotecas.base.anotacoes.DocumentacaoParametro;
 import br.univali.portugol.nucleo.bibliotecas.base.anotacoes.PropriedadesBiblioteca;
 import br.univali.portugol.nucleo.bibliotecas.gogoboard.GoGoDriver;
+import br.univali.portugol.nucleo.bibliotecas.gogoboard.Led;
 import br.univali.portugol.nucleo.bibliotecas.gogoboard.Sensor;
 
 /**
@@ -25,6 +26,7 @@ public final class GoGoBoard extends Biblioteca
     //private static GoGoDriver goGoDriver = new GoGoDriver();
     //private Boolean[] estadoMotores = new Boolean[4];
     private static Sensor sensor1 = new Sensor(1);
+    private static Led ledUsuario = new Led();
 
     @DocumentacaoFuncao(
             descricao = "Realiza a consulta do valor de um sensor",
@@ -193,7 +195,7 @@ public final class GoGoBoard extends Biblioteca
     )
     public void acender_led(boolean ligar) throws ErroExecucaoBiblioteca, InterruptedException
     {
-        //goGoDriver.led(ligar);
+        ledUsuario.ligar(ligar);
     }
 
     @DocumentacaoFuncao(
