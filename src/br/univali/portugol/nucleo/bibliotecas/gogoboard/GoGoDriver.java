@@ -1,8 +1,6 @@
 package br.univali.portugol.nucleo.bibliotecas.gogoboard;
 
 import br.univali.portugol.nucleo.bibliotecas.base.ErroExecucaoBiblioteca;
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.hid4java.HidDevice;
@@ -29,10 +27,12 @@ public class GoGoDriver implements HidServicesListener
         }
         catch (HidException ex)
         {
+            ex.printStackTrace(System.err);
             Logger.getLogger(GoGoDriver.class.getName()).log(Level.SEVERE, null, ex);
         }
         catch (ErroExecucaoBiblioteca ex)
         {
+            ex.printStackTrace(System.err);
             Logger.getLogger(GoGoDriver.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
@@ -45,11 +45,11 @@ public class GoGoDriver implements HidServicesListener
         }
         else
         {
-            throw new ErroExecucaoBiblioteca("Erro, GoGo Board está sendo usada por outro programa ou não está conectada.");
+            //throw new ErroExecucaoBiblioteca("Erro, GoGo Board está sendo usada por outro programa ou não está conectada.");
         }
     }
 
-    private byte[] receberMensagem(int numBytes) throws ErroExecucaoBiblioteca
+    public byte[] receberMensagem(int numBytes) throws ErroExecucaoBiblioteca
     {
         byte[] mensagem = new byte[numBytes];
         if (gogoBoard != null)
@@ -59,8 +59,9 @@ public class GoGoDriver implements HidServicesListener
         }
         else
         {
-            throw new ErroExecucaoBiblioteca("Erro, GoGo Board está sendo usada por outro programa ou não está conectada.");
+            //throw new ErroExecucaoBiblioteca("Erro, GoGo Board está sendo usada por outro programa ou não está conectada.");
         }
+        return null;
     }
 
     public void selecionarMotor(int numMotor) throws ErroExecucaoBiblioteca
@@ -139,6 +140,9 @@ public class GoGoDriver implements HidServicesListener
         // Pegar os servicos HID e add listener
         servicosHID = HidManager.getHidServices();
         servicosHID.addHidServicesListener(this);
+        
+        System.out.println("Iniciando Driver GoGo");
+        servicosHID.start();
 
         // Percorre a lista dos dispositivos conectados
         for (HidDevice dispositivo : servicosHID.getAttachedHidDevices())
@@ -148,37 +152,10 @@ public class GoGoDriver implements HidServicesListener
             {
                 System.out.println("GoGo Board1: " + dispositivo);
                 gogoBoard = servicosHID.getHidDevice(0x461, 0x20, null);
+                System.out.println("");
             }
         }
-    }
-
-    public short[] lerSensores() throws ErroExecucaoBiblioteca
-    {
-        short[] sensores = new short[8];
-        System.err.println("Lendo Sensor\n");
-        byte[] data;
-        do
-        {
-            data = receberMensagem(64);
-        }
-        while (data[0] != 0);       // Evitar pegar valor zerado do sensor
-
-        for (int i = 0; i < 8; i++)
-        {
-            ByteBuffer bb = ByteBuffer.wrap(data, (2 * i) + 1, 2);
-            bb.order(ByteOrder.BIG_ENDIAN);
-            sensores[i] = bb.getShort();
-        }
-        return sensores;
-    }
-
-    public int lerSensor(int numSensor) throws ErroExecucaoBiblioteca
-    {
-        if (numSensor >= 1 || numSensor <= 8)
-        {
-            return lerSensores()[numSensor - 1];
-        }
-        return -1;
+        
     }
 
     @Override
