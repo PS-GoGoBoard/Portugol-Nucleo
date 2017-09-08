@@ -11,22 +11,22 @@ import java.nio.ByteOrder;
 public class Sensor
 {
     //private static GoGoDriver gogoDriver = new GoGoDriver();
-    private int nome;
+    private int numero;
     private int valor;
 
     public Sensor(int nome)
     {
-        this.nome = nome;
+        this.numero = nome;
     }
 
-    public int getNome()
+    public int getNumero()
     {
-        return nome;
+        return numero;
     }
 
-    public void setNome(int nome)
+    public void setNumero(int numero)
     {
-        this.nome = nome;
+        this.numero = numero;
     }
 
     public int getValor() throws ErroExecucaoBiblioteca
@@ -38,7 +38,7 @@ public class Sensor
             mensagem = GoGoDriver.obterInstancia().receberMensagem(64);
         }
         while (mensagem[0] != 0);       // Evitar pegar valor zerado do sensor
-        ByteBuffer bb = ByteBuffer.wrap(mensagem, (2 * (nome-1)) + 1, 2); // Nome-1 pois o sensor começa em 0 na mensagem
+        ByteBuffer bb = ByteBuffer.wrap(mensagem, (2 * (numero)) + 1, 2); // Nome-1 pois o sensor começa em 0 na mensagem
         bb.order(ByteOrder.BIG_ENDIAN);
         valor = bb.getShort();
         return valor;

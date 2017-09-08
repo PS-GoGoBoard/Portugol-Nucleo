@@ -15,7 +15,6 @@ public class Led
         return ligado;
     }
     
-    
     public void ligar(boolean ligar) throws ErroExecucaoBiblioteca
     {
         byte[] mensagem = new byte[64];

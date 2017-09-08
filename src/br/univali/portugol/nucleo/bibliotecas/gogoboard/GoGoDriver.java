@@ -55,7 +55,7 @@ public class GoGoDriver implements HidServicesListener
         }
         else
         {
-            //throw new ErroExecucaoBiblioteca("Erro, GoGo Board está sendo usada por outro programa ou não está conectada.");
+            throw new ErroExecucaoBiblioteca("Erro, GoGo Board está sendo usada por outro programa ou não está conectada.");
         }
     }
 
@@ -69,56 +69,15 @@ public class GoGoDriver implements HidServicesListener
         }
         else
         {
-            //throw new ErroExecucaoBiblioteca("Erro, GoGo Board está sendo usada por outro programa ou não está conectada.");
+            throw new ErroExecucaoBiblioteca("Erro, GoGo Board está sendo usada por outro programa ou não está conectada.");
         }
-        return null;
-    }
-
-    public void selecionarMotor(int numMotor) throws ErroExecucaoBiblioteca
-    {
-        byte[] mensagem = new byte[64];
-        mensagem[2] = 7;
-        mensagem[3] = (byte) numMotor;
-        enviarMensagem(mensagem);
-    }
-
-    public void ligarMotor() throws ErroExecucaoBiblioteca
-    {
-        byte[] mensagem = new byte[64];
-        mensagem[2] = 2;
-        mensagem[3] = 0;
-        mensagem[4] = 1;
-        enviarMensagem(mensagem);
-    }
-
-    public void desligarMotor() throws ErroExecucaoBiblioteca
-    {
-        byte[] mensagem = new byte[64];
-        mensagem[2] = 2;
-        mensagem[3] = 0;
-        mensagem[4] = 0;
-        enviarMensagem(mensagem);
+        //return null;
     }
 
     public void beep() throws ErroExecucaoBiblioteca
     {
         byte[] mensagem = new byte[64];
         mensagem[2] = 11;
-        enviarMensagem(mensagem);
-    }
-
-    public void led(boolean ligar) throws ErroExecucaoBiblioteca
-    {
-        byte[] mensagem = new byte[64];
-        mensagem[2] = 10;
-        if (ligar)
-        {
-            mensagem[4] = 1;
-        }
-        else
-        {
-            mensagem[4] = 0;
-        }
         enviarMensagem(mensagem);
     }
 
