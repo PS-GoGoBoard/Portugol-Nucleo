@@ -9,10 +9,11 @@ import br.univali.portugol.nucleo.bibliotecas.base.anotacoes.DocumentacaoFuncao;
 import br.univali.portugol.nucleo.bibliotecas.base.anotacoes.DocumentacaoParametro;
 import br.univali.portugol.nucleo.bibliotecas.base.anotacoes.PropriedadesBiblioteca;
 import br.univali.portugol.nucleo.bibliotecas.gogoboard.DCMotor;
-import br.univali.portugol.nucleo.bibliotecas.gogoboard.GoGoDriver;
 import br.univali.portugol.nucleo.bibliotecas.gogoboard.Led;
 import br.univali.portugol.nucleo.bibliotecas.gogoboard.Motor;
 import br.univali.portugol.nucleo.bibliotecas.gogoboard.Sensor;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -25,15 +26,25 @@ import br.univali.portugol.nucleo.bibliotecas.gogoboard.Sensor;
 )
 public final class GoGoBoard extends Biblioteca
 {
-    //private static GoGoDriver goGoDriver = new GoGoDriver();
-    //private Boolean[] estadoMotores = new Boolean[4];
-    private static Sensor sensor1 = new Sensor(1);
+    private static List<Sensor> sensores = new ArrayList<Sensor>()
+    {
+        {
+            add(new Sensor(0));
+            add(new Sensor(1));
+            add(new Sensor(2));
+            add(new Sensor(3));
+            add(new Sensor(4));
+            add(new Sensor(5));
+            add(new Sensor(6));
+            add(new Sensor(7));
+        }
+    };
+    
     private static Motor saidaA;
     private static Motor saidaB;
     private static Motor saidaC;
     private static Motor saidaD;
-    
-    
+
     private static Led ledUsuario = new Led();
 
     @DocumentacaoFuncao(
@@ -50,7 +61,7 @@ public final class GoGoBoard extends Biblioteca
     )
     public int consultar_sensor(int numSensor) throws ErroExecucaoBiblioteca, InterruptedException
     {
-        return sensor1.getValor();
+        return sensores.get(numSensor - 1).getValor();
     }
 
     @DocumentacaoFuncao(
@@ -64,7 +75,7 @@ public final class GoGoBoard extends Biblioteca
                 @Autor(nome = "Ailton Cardoso Jr", email = "ailtoncardosojr@edu.univali.br")
             }
     )
-    public void ligar_motor(String motores) throws ErroExecucaoBiblioteca, InterruptedException
+    public void ligar_motores(String motores) throws ErroExecucaoBiblioteca, InterruptedException
     {
         motores = motores.toLowerCase();
         for (char nomeMotor : motores.toCharArray())
@@ -106,7 +117,7 @@ public final class GoGoBoard extends Biblioteca
                 @Autor(nome = "Ailton Cardoso Jr", email = "ailtoncardosojr@edu.univali.br")
             }
     )
-    public void desligar_motor(String motores) throws ErroExecucaoBiblioteca, InterruptedException
+    public void desligar_motores(String motores) throws ErroExecucaoBiblioteca, InterruptedException
     {
         motores = motores.toLowerCase();
         for (char nomeMotor : motores.toCharArray())
@@ -114,19 +125,15 @@ public final class GoGoBoard extends Biblioteca
             switch (nomeMotor)
             {
                 case 'a':
-                    saidaA = new DCMotor(1);
                     ((DCMotor) saidaA).desligarMotor();
                     break;
                 case 'b':
-                    saidaB = new DCMotor(2);
                     ((DCMotor) saidaB).desligarMotor();
                     break;
                 case 'c':
-                    saidaC = new DCMotor(4);
                     ((DCMotor) saidaC).desligarMotor();
                     break;
                 case 'd':
-                    saidaD = new DCMotor(8);
                     ((DCMotor) saidaD).desligarMotor();
                     break;
                 default:
@@ -137,45 +144,53 @@ public final class GoGoBoard extends Biblioteca
         System.out.println("------------------\n");
     }
 
-//    @DocumentacaoFuncao(
-//            descricao = "Retorna o estado dos motores especificados or parametro",
-//            parametros =
-//            {
-//                @DocumentacaoParametro(nome = "motores", descricao = "as letras correspondentes aos motores desejados \n Ex: \"abcd\"")
-//            },
-//            retorno = "Estado do(s) sensor(es)",
-//            autores =
-//            {
-//                @Autor(nome = "Ailton Cardoso Jr", email = "ailtoncardosojr@edu.univali.br")
-//            }
-//    )
-//    public boolean estado_motor(String motores) throws ErroExecucaoBiblioteca, InterruptedException
-//    {
-//        boolean estado = false;
-//        motores = motores.toLowerCase();
-//        for (char motor : motores.toCharArray())
-//        {
-//            switch (motor)
-//            {
-//                case 'a':
-//                    estado = estadoMotores[0];
-//                    break;
-//                case 'b':
-//                    estado = estadoMotores[1];
-//                    break;
-//                case 'c':
-//                    estado = estadoMotores[2];
-//                    break;
-//                case 'd':
-//                    estado = estadoMotores[3];
-//                    break;
-//                default:
-//                    throw new AssertionError();
-//            }
-//        }
-//        return estado;
-//    }
-
+    @DocumentacaoFuncao(
+            descricao = "Retorna o estado dos motores especificados or parametro",
+            parametros =
+            {
+                @DocumentacaoParametro(nome = "motores", descricao = "as letras correspondentes aos motores desejados \n Ex: \"abcd\"")
+            },
+            retorno = "Estado do(s) sensor(es)",
+            autores =
+            {
+                @Autor(nome = "Ailton Cardoso Jr", email = "ailtoncardosojr@edu.univali.br")
+            }
+    )
+    public boolean estado_motores(String motores) throws ErroExecucaoBiblioteca, InterruptedException
+    {
+        //boolean estado = false;
+        Motor motor;
+        motores = motores.toLowerCase();
+        for (char nomeMotor : motores.toCharArray())
+        {
+            switch (nomeMotor)
+            {
+                case 'a':
+                    motor = saidaA;
+                    //estado = saidaA.isLigado();
+                    break;
+                case 'b':
+                    motor = saidaB;
+                    //estado = saidaB.isLigado();
+                    break;
+                case 'c':
+                    motor = saidaC;
+                    //estado = saidaC.isLigado();
+                    break;
+                case 'd':
+                    motor = saidaD;
+                    //estado = saidaD.isLigado();
+                    break;
+                default:
+                    throw new ErroExecucaoBiblioteca("Somente são aceitos motores A,B,C e D");
+            }
+            if (motor == null || !motor.isLigado())
+            {
+                return false;
+            }
+        }
+        return true;
+    }
     @DocumentacaoFuncao(
             descricao = "Acionar o beep",
             autores =
