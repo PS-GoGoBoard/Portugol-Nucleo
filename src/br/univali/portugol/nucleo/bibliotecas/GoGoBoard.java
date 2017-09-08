@@ -88,56 +88,54 @@ public final class GoGoBoard extends Biblioteca
                     ((DCMotor) saidaD).ligarMotor();
                     break;
                 default:
-                    throw new AssertionError();
+                    throw new ErroExecucaoBiblioteca("Somente são aceitos motores A,B,C e D");
             }
-            //goGoDriver.ligarMotor();
             System.out.println("Ligar motor: " + nomeMotor);
         }
         System.out.println("------------------\n");
     }
-//
-//    @DocumentacaoFuncao(
-//            descricao = "Desligar os motores especificados or parametro",
-//            parametros =
-//            {
-//                @DocumentacaoParametro(nome = "motores", descricao = "as letras correspondentes aos motores desejados \n Ex: \"abcd\"")
-//            },
-//            autores =
-//            {
-//                @Autor(nome = "Ailton Cardoso Jr", email = "ailtoncardosojr@edu.univali.br")
-//            }
-//    )
-//    public void desligar_motor(String motores) throws ErroExecucaoBiblioteca, InterruptedException
-//    {
-//        motores = motores.toLowerCase();
-//        for (char motor : motores.toCharArray())
-//        {
-//            switch (motor)
-//            {
-//                case 'a':
-//                    goGoDriver.selecionarMotor(1);
-//                    estadoMotores[0] = false;
-//                    break;
-//                case 'b':
-//                    goGoDriver.selecionarMotor(2);
-//                    estadoMotores[1] = false;
-//                    break;
-//                case 'c':
-//                    goGoDriver.selecionarMotor(4);
-//                    estadoMotores[2] = false;
-//                    break;
-//                case 'd':
-//                    goGoDriver.selecionarMotor(8);
-//                    estadoMotores[3] = false;
-//                    break;
-//                default:
-//                    throw new AssertionError();
-//            }
-//            goGoDriver.desligarMotor();
-//            System.out.println("Desligar motor: " + motor);
-//        }
-//        System.out.println("------------------\n");
-//    }
+
+    @DocumentacaoFuncao(
+            descricao = "Desligar os motores especificados por parametro",
+            parametros =
+            {
+                @DocumentacaoParametro(nome = "motores", descricao = "as letras correspondentes aos motores desejados \n Ex: \"abcd\"")
+            },
+            autores =
+            {
+                @Autor(nome = "Ailton Cardoso Jr", email = "ailtoncardosojr@edu.univali.br")
+            }
+    )
+    public void desligar_motor(String motores) throws ErroExecucaoBiblioteca, InterruptedException
+    {
+        motores = motores.toLowerCase();
+        for (char nomeMotor : motores.toCharArray())
+        {
+            switch (nomeMotor)
+            {
+                case 'a':
+                    saidaA = new DCMotor(1);
+                    ((DCMotor) saidaA).desligarMotor();
+                    break;
+                case 'b':
+                    saidaB = new DCMotor(2);
+                    ((DCMotor) saidaB).desligarMotor();
+                    break;
+                case 'c':
+                    saidaC = new DCMotor(4);
+                    ((DCMotor) saidaC).desligarMotor();
+                    break;
+                case 'd':
+                    saidaD = new DCMotor(8);
+                    ((DCMotor) saidaD).desligarMotor();
+                    break;
+                default:
+                    throw new ErroExecucaoBiblioteca("Somente são aceitos motores A,B,C e D");
+            }
+            System.out.println("Desligar motor: " + nomeMotor);
+        }
+        System.out.println("------------------\n");
+    }
 
 //    @DocumentacaoFuncao(
 //            descricao = "Retorna o estado dos motores especificados or parametro",
