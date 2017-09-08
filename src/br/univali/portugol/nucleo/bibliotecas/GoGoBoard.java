@@ -8,8 +8,10 @@ import br.univali.portugol.nucleo.bibliotecas.base.anotacoes.DocumentacaoBibliot
 import br.univali.portugol.nucleo.bibliotecas.base.anotacoes.DocumentacaoFuncao;
 import br.univali.portugol.nucleo.bibliotecas.base.anotacoes.DocumentacaoParametro;
 import br.univali.portugol.nucleo.bibliotecas.base.anotacoes.PropriedadesBiblioteca;
+import br.univali.portugol.nucleo.bibliotecas.gogoboard.DCMotor;
 import br.univali.portugol.nucleo.bibliotecas.gogoboard.GoGoDriver;
 import br.univali.portugol.nucleo.bibliotecas.gogoboard.Led;
+import br.univali.portugol.nucleo.bibliotecas.gogoboard.Motor;
 import br.univali.portugol.nucleo.bibliotecas.gogoboard.Sensor;
 
 /**
@@ -26,6 +28,12 @@ public final class GoGoBoard extends Biblioteca
     //private static GoGoDriver goGoDriver = new GoGoDriver();
     //private Boolean[] estadoMotores = new Boolean[4];
     private static Sensor sensor1 = new Sensor(1);
+    private static Motor saidaA;
+    private static Motor saidaB;
+    private static Motor saidaC;
+    private static Motor saidaD;
+    
+    
     private static Led ledUsuario = new Led();
 
     @DocumentacaoFuncao(
@@ -45,48 +53,48 @@ public final class GoGoBoard extends Biblioteca
         return sensor1.getValor();
     }
 
-//    @DocumentacaoFuncao(
-//            descricao = "Ligar os motores especificados or parametro",
-//            parametros =
-//            {
-//                @DocumentacaoParametro(nome = "motores", descricao = "as letras correspondentes aos motores desejados \n Ex: \"abcd\"")
-//            },
-//            autores =
-//            {
-//                @Autor(nome = "Ailton Cardoso Jr", email = "ailtoncardosojr@edu.univali.br")
-//            }
-//    )
-//    public void ligar_motor(String motores) throws ErroExecucaoBiblioteca, InterruptedException
-//    {
-//        motores = motores.toLowerCase();
-//        for (char motor : motores.toCharArray())
-//        {
-//            switch (motor)
-//            {
-//                case 'a':
-//                    goGoDriver.selecionarMotor(1);
-//                    estadoMotores[0] = true;
-//                    break;
-//                case 'b':
-//                    goGoDriver.selecionarMotor(2);
-//                    estadoMotores[1] = true;
-//                    break;
-//                case 'c':
-//                    goGoDriver.selecionarMotor(4);
-//                    estadoMotores[2] = true;
-//                    break;
-//                case 'd':
-//                    goGoDriver.selecionarMotor(8);
-//                    estadoMotores[3] = true;
-//                    break;
-//                default:
-//                    throw new AssertionError();
-//            }
-//            goGoDriver.ligarMotor();
-//            System.out.println("Ligar motor: " + motor);
-//        }
-//        System.out.println("------------------\n");
-//    }
+    @DocumentacaoFuncao(
+            descricao = "Ligar os motores especificados or parametro",
+            parametros =
+            {
+                @DocumentacaoParametro(nome = "motores", descricao = "as letras correspondentes aos motores desejados \n Ex: \"abcd\"")
+            },
+            autores =
+            {
+                @Autor(nome = "Ailton Cardoso Jr", email = "ailtoncardosojr@edu.univali.br")
+            }
+    )
+    public void ligar_motor(String motores) throws ErroExecucaoBiblioteca, InterruptedException
+    {
+        motores = motores.toLowerCase();
+        for (char nomeMotor : motores.toCharArray())
+        {
+            switch (nomeMotor)
+            {
+                case 'a':
+                    saidaA = new DCMotor(1);
+                    ((DCMotor) saidaA).ligarMotor();
+                    break;
+                case 'b':
+                    saidaB = new DCMotor(2);
+                    ((DCMotor) saidaB).ligarMotor();
+                    break;
+                case 'c':
+                    saidaC = new DCMotor(4);
+                    ((DCMotor) saidaC).ligarMotor();
+                    break;
+                case 'd':
+                    saidaD = new DCMotor(8);
+                    ((DCMotor) saidaD).ligarMotor();
+                    break;
+                default:
+                    throw new AssertionError();
+            }
+            //goGoDriver.ligarMotor();
+            System.out.println("Ligar motor: " + nomeMotor);
+        }
+        System.out.println("------------------\n");
+    }
 //
 //    @DocumentacaoFuncao(
 //            descricao = "Desligar os motores especificados or parametro",
