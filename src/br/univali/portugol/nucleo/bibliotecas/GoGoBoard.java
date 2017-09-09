@@ -180,6 +180,48 @@ public final class GoGoBoard extends Biblioteca
         controlarDirecaoMotor(motores, 0);
     }
     
+    @DocumentacaoFuncao(
+            descricao = "Inverter sentido dos motores especificados por parametro",
+            parametros =
+            {
+                @DocumentacaoParametro(nome = "motores", descricao = "as letras correspondentes aos motores desejados \n Ex: \"abcd\"")
+            },
+            autores =
+            {
+                @Autor(nome = "Ailton Cardoso Jr", email = "ailtoncardosojr@edu.univali.br")
+            }
+    )
+    public void inverter_direcao_motor(String motores) throws ErroExecucaoBiblioteca, InterruptedException
+    {
+        motores = motores.toLowerCase();
+        for (char nomeMotor : motores.toCharArray())
+        {
+            switch (nomeMotor)
+            {
+                case 'a':
+                    if(saidaA != null)
+                    ((DCMotor) saidaA).inverterDirecao();
+                    break;
+                case 'b':
+                    if(saidaB != null)
+                    ((DCMotor) saidaB).inverterDirecao();
+                    break;
+                case 'c':
+                    if(saidaC != null)
+                    ((DCMotor) saidaC).inverterDirecao();
+                    break;
+                case 'd':
+                    if(saidaD != null)
+                    ((DCMotor) saidaD).inverterDirecao();
+                    break;
+                default:
+                    throw new ErroExecucaoBiblioteca("Somente são aceitos motores A,B,C e D");
+            }
+            System.out.println("Inverter direção motor: " + nomeMotor);
+        }
+        System.out.println("------------------\n");
+    }
+    
     private void controlarDirecaoMotor(String motores, int direcao) throws ErroExecucaoBiblioteca{
         motores = motores.toLowerCase();
         for (char nomeMotor : motores.toCharArray())
@@ -188,24 +230,24 @@ public final class GoGoBoard extends Biblioteca
             {
                 case 'a':
                     if(saidaA != null)
-                    ((DCMotor) saidaA).inverterDirecao(direcao);
+                    ((DCMotor) saidaA).definirDirecao(direcao);
                     break;
                 case 'b':
                     if(saidaB != null)
-                    ((DCMotor) saidaB).inverterDirecao(direcao);
+                    ((DCMotor) saidaB).definirDirecao(direcao);
                     break;
                 case 'c':
                     if(saidaC != null)
-                    ((DCMotor) saidaC).inverterDirecao(direcao);
+                    ((DCMotor) saidaC).definirDirecao(direcao);
                     break;
                 case 'd':
                     if(saidaD != null)
-                    ((DCMotor) saidaD).inverterDirecao(direcao);
+                    ((DCMotor) saidaD).definirDirecao(direcao);
                     break;
                 default:
                     throw new ErroExecucaoBiblioteca("Somente são aceitos motores A,B,C e D");
             }
-            System.out.println("Desligar motor: " + nomeMotor);
+            System.out.println("Controlar direção motor: " + nomeMotor);
         }
         System.out.println("------------------\n");
     }

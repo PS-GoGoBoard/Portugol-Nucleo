@@ -34,8 +34,23 @@ public class DCMotor extends Motor
         GoGoDriver.obterInstancia().enviarMensagem(mensagem);
         setLigado(false);
     }
+    
+    public void inverterDirecao() throws ErroExecucaoBiblioteca
+    {
+        selecionarMotor();
+        byte[] mensagem = new byte[64];
+        mensagem[2] = 4;
+        mensagem[3] = 0;
+        GoGoDriver.obterInstancia().enviarMensagem(mensagem);
+        if (isDireita())
+        {
+            setDireita(false);
+        }else{
+            setDireita(true);
+        }
+    }
 
-    public void inverterDirecao(int direcao) throws ErroExecucaoBiblioteca
+    public void definirDirecao(int direcao) throws ErroExecucaoBiblioteca
     {
         selecionarMotor();
         if (!isLigado())
