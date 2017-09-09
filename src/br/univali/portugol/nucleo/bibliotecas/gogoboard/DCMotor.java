@@ -13,7 +13,7 @@ public class DCMotor extends Motor
         super(numMotor);
     }
 
-    public void ligarMotor() throws ErroExecucaoBiblioteca
+    public void ligar() throws ErroExecucaoBiblioteca
     {
         selecionarMotor();
         byte[] mensagem = new byte[64];
@@ -24,7 +24,7 @@ public class DCMotor extends Motor
         setLigado(true);
     }
 
-    public void desligarMotor() throws ErroExecucaoBiblioteca
+    public void desligar() throws ErroExecucaoBiblioteca
     {
         selecionarMotor();
         byte[] mensagem = new byte[64];
@@ -33,5 +33,25 @@ public class DCMotor extends Motor
         mensagem[4] = 0;
         GoGoDriver.obterInstancia().enviarMensagem(mensagem);
         setLigado(false);
+    }
+
+    public void inverterDirecao(int direcao) throws ErroExecucaoBiblioteca
+    {
+        selecionarMotor();
+        if (!isLigado())
+        {
+            ligar();
+        }
+        byte[] mensagem = new byte[64];
+        mensagem[2] = 3;
+        mensagem[3] = 0;
+        mensagem[4] = (byte) direcao;
+        GoGoDriver.obterInstancia().enviarMensagem(mensagem);
+        if (direcao == 1)
+        {
+            setDireita(true);
+        }else{
+            setDireita(false);
+        }
     }
 }

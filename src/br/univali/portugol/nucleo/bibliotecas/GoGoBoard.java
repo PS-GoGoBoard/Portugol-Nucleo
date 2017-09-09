@@ -84,19 +84,19 @@ public final class GoGoBoard extends Biblioteca
             {
                 case 'a':
                     saidaA = new DCMotor(1);
-                    ((DCMotor) saidaA).ligarMotor();
+                    ((DCMotor) saidaA).ligar();
                     break;
                 case 'b':
                     saidaB = new DCMotor(2);
-                    ((DCMotor) saidaB).ligarMotor();
+                    ((DCMotor) saidaB).ligar();
                     break;
                 case 'c':
                     saidaC = new DCMotor(4);
-                    ((DCMotor) saidaC).ligarMotor();
+                    ((DCMotor) saidaC).ligar();
                     break;
                 case 'd':
                     saidaD = new DCMotor(8);
-                    ((DCMotor) saidaD).ligarMotor();
+                    ((DCMotor) saidaD).ligar();
                     break;
                 default:
                     throw new ErroExecucaoBiblioteca("Somente são aceitos motores A,B,C e D");
@@ -125,16 +125,82 @@ public final class GoGoBoard extends Biblioteca
             switch (nomeMotor)
             {
                 case 'a':
-                    ((DCMotor) saidaA).desligarMotor();
+                    if(saidaA != null)
+                    ((DCMotor) saidaA).desligar();
                     break;
                 case 'b':
-                    ((DCMotor) saidaB).desligarMotor();
+                    if(saidaB != null)
+                    ((DCMotor) saidaB).desligar();
                     break;
                 case 'c':
-                    ((DCMotor) saidaC).desligarMotor();
+                    if(saidaC != null)
+                    ((DCMotor) saidaC).desligar();
                     break;
                 case 'd':
-                    ((DCMotor) saidaD).desligarMotor();
+                    if(saidaD != null)
+                    ((DCMotor) saidaD).desligar();
+                    break;
+                default:
+                    throw new ErroExecucaoBiblioteca("Somente são aceitos motores A,B,C e D");
+            }
+            System.out.println("Desligar motor: " + nomeMotor);
+        }
+        System.out.println("------------------\n");
+    }
+    
+    @DocumentacaoFuncao(
+            descricao = "Mudar sentido dos motores especificados por parametro para a direita, ou seja, Sentido Horário",
+            parametros =
+            {
+                @DocumentacaoParametro(nome = "motores", descricao = "as letras correspondentes aos motores desejados \n Ex: \"abcd\"")
+            },
+            autores =
+            {
+                @Autor(nome = "Ailton Cardoso Jr", email = "ailtoncardosojr@edu.univali.br")
+            }
+    )
+    public void sentido_horario_motor(String motores) throws ErroExecucaoBiblioteca, InterruptedException
+    {
+        controlarDirecaoMotor(motores, 1);
+    }
+    
+    @DocumentacaoFuncao(
+            descricao = "Mudar sentido dos motores especificados por parametro para a direita, ou seja, Sentido Horário",
+            parametros =
+            {
+                @DocumentacaoParametro(nome = "motores", descricao = "as letras correspondentes aos motores desejados \n Ex: \"abcd\"")
+            },
+            autores =
+            {
+                @Autor(nome = "Ailton Cardoso Jr", email = "ailtoncardosojr@edu.univali.br")
+            }
+    )
+    public void sentido_anti_horario_motor(String motores) throws ErroExecucaoBiblioteca, InterruptedException
+    {
+        controlarDirecaoMotor(motores, 0);
+    }
+    
+    private void controlarDirecaoMotor(String motores, int direcao) throws ErroExecucaoBiblioteca{
+        motores = motores.toLowerCase();
+        for (char nomeMotor : motores.toCharArray())
+        {
+            switch (nomeMotor)
+            {
+                case 'a':
+                    if(saidaA != null)
+                    ((DCMotor) saidaA).inverterDirecao(direcao);
+                    break;
+                case 'b':
+                    if(saidaB != null)
+                    ((DCMotor) saidaB).inverterDirecao(direcao);
+                    break;
+                case 'c':
+                    if(saidaC != null)
+                    ((DCMotor) saidaC).inverterDirecao(direcao);
+                    break;
+                case 'd':
+                    if(saidaD != null)
+                    ((DCMotor) saidaD).inverterDirecao(direcao);
                     break;
                 default:
                     throw new ErroExecucaoBiblioteca("Somente são aceitos motores A,B,C e D");
@@ -158,7 +224,6 @@ public final class GoGoBoard extends Biblioteca
     )
     public boolean estado_motores(String motores) throws ErroExecucaoBiblioteca, InterruptedException
     {
-        //boolean estado = false;
         Motor motor;
         motores = motores.toLowerCase();
         for (char nomeMotor : motores.toCharArray())
@@ -167,19 +232,15 @@ public final class GoGoBoard extends Biblioteca
             {
                 case 'a':
                     motor = saidaA;
-                    //estado = saidaA.isLigado();
                     break;
                 case 'b':
                     motor = saidaB;
-                    //estado = saidaB.isLigado();
                     break;
                 case 'c':
                     motor = saidaC;
-                    //estado = saidaC.isLigado();
                     break;
                 case 'd':
                     motor = saidaD;
-                    //estado = saidaD.isLigado();
                     break;
                 default:
                     throw new ErroExecucaoBiblioteca("Somente são aceitos motores A,B,C e D");
