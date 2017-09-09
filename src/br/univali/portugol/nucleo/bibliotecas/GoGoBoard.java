@@ -222,6 +222,49 @@ public final class GoGoBoard extends Biblioteca
         System.out.println("------------------\n");
     }
     
+    @DocumentacaoFuncao(
+            descricao = "Setar força dos motores especificados por parametro",
+            parametros =
+            {
+                @DocumentacaoParametro(nome = "motores", descricao = "Letras correspondentes aos motores desejados \n Ex: \"abcd\""),
+                @DocumentacaoParametro(nome = "forca", descricao = "Valor inteiro correspondente à força")
+            },
+            autores =
+            {
+                @Autor(nome = "Ailton Cardoso Jr", email = "ailtoncardosojr@edu.univali.br")
+            }
+    )
+    public void setar_forca_motor(String motores, int forca) throws ErroExecucaoBiblioteca, InterruptedException
+    {
+        motores = motores.toLowerCase();
+        for (char nomeMotor : motores.toCharArray())
+        {
+            switch (nomeMotor)
+            {
+                case 'a':
+                    if(saidaA != null)
+                    ((DCMotor) saidaA).setarForca(forca);
+                    break;
+                case 'b':
+                    if(saidaB != null)
+                    ((DCMotor) saidaB).setarForca(forca);
+                    break;
+                case 'c':
+                    if(saidaC != null)
+                    ((DCMotor) saidaC).setarForca(forca);
+                    break;
+                case 'd':
+                    if(saidaD != null)
+                    ((DCMotor) saidaD).setarForca(forca);
+                    break;
+                default:
+                    throw new ErroExecucaoBiblioteca("Somente são aceitos motores A,B,C e D");
+            }
+            System.out.println("Setar força motor: " + nomeMotor);
+        }
+        System.out.println("------------------\n");
+    }
+    
     private void controlarDirecaoMotor(String motores, int direcao) throws ErroExecucaoBiblioteca{
         motores = motores.toLowerCase();
         for (char nomeMotor : motores.toCharArray())
